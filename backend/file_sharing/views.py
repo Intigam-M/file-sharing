@@ -71,9 +71,26 @@ class FileDetailView(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        comments = Comment.objects.filter(file=instance)
-        comment_serializer = CommentSerializer(comments, many=True)
-        serializer = self.get_serializer(instance)
-        data = serializer.data
-        data['comments'] = comment_serializer.data
-        return Response(data)
+        if instance.uploader == request.user or Share.objects.filter(file=instance, shared_with=request.user).exists():
+            comments = Comment.objects.filter(file=instance)
+            comment_serializer = CommentSerializer(comments, many=True)
+            serializer = self.get_serializer(instance)
+            data = serializer.data
+            data['comments'] = comment_serializer.data
+            return Response(data)
+        else:
+            return Response({'detail': 'You are not allowed to view this file.'}, status=status.HTTP_403_FORBIDDEN)
+    
+
+class DeleteCommentView(generics.DestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.user == instance.author or request.user == instance.file.uploader:
+            self.perform_destroy(instance)
+            return Response({'detail': 'Comment deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({'detail': 'You are not allowed to delete this comment.'}, status=status.HTTP_403_FORBIDDEN)
