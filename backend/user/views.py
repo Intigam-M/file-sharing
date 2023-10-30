@@ -25,3 +25,9 @@ def user_login(request):
         serializer = UserInfoSerializer(instance=user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(data={'message': 'User info or password is incorrect!'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def user_logout(request):
+    request.user.auth_token.delete()
+    return Response(data={'message': 'User logout successfully!'}, status=status.HTTP_200_OK)

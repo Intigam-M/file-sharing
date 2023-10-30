@@ -1,12 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import timedelta
+from django.utils import timezone
 
 class File(models.Model):
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField( blank=True)
     upload_date = models.DateTimeField(auto_now_add=True)
-    expiration_date = models.DateTimeField()
+    expiration_date = models.DateTimeField(default=timezone.now() + timedelta(weeks=1))
+    file_data = models.FileField(upload_to='')
 
 class Share(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)

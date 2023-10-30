@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 
 api_patterns = [
     path('auth/', include('user.urls')),
+    path('file/', include('file_sharing.urls')),
 ]
 
 
