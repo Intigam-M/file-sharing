@@ -1,6 +1,14 @@
 from django.urls import path
-from .views import AddFileView, DeleteFileView, FileListView, ShareFileView, AddCommentView, FileDetailView, DeleteCommentView
-
+from .views import ( 
+    AddFileView, 
+    DeleteFileView, 
+    FileListView, 
+    ShareFileView,
+    AddCommentView,
+    FileDetailView,
+    DeleteCommentView,
+    EditCommentView,
+)
 urlpatterns = [
     path('list/', FileListView.as_view(), name='file-list'),
     path('add/', AddFileView.as_view(), name='add-file'),
@@ -9,4 +17,5 @@ urlpatterns = [
     path('<int:file_id>/comment/add/', AddCommentView.as_view(), name='add-comment'),
     path('<int:pk>/detail/', FileDetailView.as_view(), name='file-detail'),
     path('comment/delete/<int:pk>/', DeleteCommentView.as_view(), name='delete-comment'),
+    path('comment/edit/<int:pk>/', EditCommentView.as_view(), name='edit-comment'),
 ]

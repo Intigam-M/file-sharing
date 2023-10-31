@@ -1,12 +1,12 @@
-# file_sharing/views.py
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import PermissionDenied
 from .models import File, Share, Comment
 from .serializers import FileSerializer, ShareSerializer, CommentSerializer
-
-
+from django.http import HttpResponse
+from .tasks import delete_files_older_than_7_days
 
 
 class FileListView(generics.ListAPIView):
@@ -53,16 +53,6 @@ class ShareFileView(generics.CreateAPIView):
         file_instance = File.objects.get(pk=file_id)
         serializer.save(file=file_instance)
 
-class AddCommentView(generics.CreateAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def perform_create(self, serializer):
-        file_id = self.kwargs.get('file_id')
-        file_instance = File.objects.get(pk=file_id)
-        serializer.save(file=file_instance, author=self.request.user)
-
 
 class FileDetailView(generics.RetrieveAPIView):
     queryset = File.objects.all()
@@ -80,7 +70,45 @@ class FileDetailView(generics.RetrieveAPIView):
             return Response(data)
         else:
             return Response({'detail': 'You are not allowed to view this file.'}, status=status.HTTP_403_FORBIDDEN)
-    
+
+
+class AddCommentView(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        file_id = self.kwargs.get('file_id')
+        file_instance = File.objects.get(pk=file_id)
+
+        # Check if the user is the uploader of the file
+        if file_instance.uploader == self.request.user:
+            serializer.save(file=file_instance, author=self.request.user)
+        else:
+            # Check if the file is shared with the user for commenting
+            share = Share.objects.filter(file=file_instance, shared_with=self.request.user, can_comment=True).first()
+            if share:
+                serializer.save(file=file_instance, author=self.request.user)
+            else:
+                raise PermissionDenied('You do not have permission to comment on this file.')
+
+
+class EditCommentView(generics.UpdateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if request.user == instance.author:
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response({'detail': 'You do not have permission to edit this comment.'}, status=status.HTTP_403_FORBIDDEN)
+
 
 class DeleteCommentView(generics.DestroyAPIView):
     queryset = Comment.objects.all()
@@ -94,3 +122,4 @@ class DeleteCommentView(generics.DestroyAPIView):
             return Response({'detail': 'Comment deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'detail': 'You are not allowed to delete this comment.'}, status=status.HTTP_403_FORBIDDEN)
+        

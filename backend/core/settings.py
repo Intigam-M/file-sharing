@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'file_sharing',
     'rest_framework',
     'rest_framework.authtoken',
-    "corsheaders",
+    'corsheaders',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
+
+
+CELERY_BROKER_URL = "redis://localhost:6379"
