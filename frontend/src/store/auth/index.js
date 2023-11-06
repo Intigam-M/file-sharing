@@ -11,13 +11,13 @@ export const authSlice = createSlice({
   reducers: {
     loginSuccess: (state, action) => {
       state.isAuthenticated = true;
-      state.user = action.payload; // Burada action üzerinden kullanıcı verilerini alabiliriz
-      localStorage.setItem('user', JSON.stringify(action.payload)); // Kullanıcı bilgilerini local storage'a kaydediyoruz
+      state.user = action.payload; 
+      localStorage.setItem('user', JSON.stringify(action.payload));
     },
     logoutSuccess: (state) => {
       state.isAuthenticated = false;
       state.user = null;
-      localStorage.removeItem('user'); // Kullanıcıyı çıkış yaptığında local storage'dan temizliyoruz
+      localStorage.removeItem('user');
     },
   },
 });
