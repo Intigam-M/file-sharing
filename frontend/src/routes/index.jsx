@@ -6,6 +6,7 @@ import Home from "~/pages/home";
 import MainLayout from "~/layouts";
 import { useEffect } from 'react'
 import { loginSuccess } from '~/store/auth'
+import { setTokenToAxios } from '~/utils/axios'
 
 
 function AppRoutes() {
@@ -14,9 +15,10 @@ function AppRoutes() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const user = localStorage.getItem('user');
+        const user = JSON.parse(localStorage.getItem('user'))
         if (user) {
-            dispatch(loginSuccess(JSON.parse(user)));
+            dispatch(loginSuccess(user));
+            setTokenToAxios(user.token);
         }
     }, [])
 
