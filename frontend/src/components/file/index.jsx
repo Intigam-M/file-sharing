@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom';
 
 function File({ file, user_id }) {
     return (
-        <tr className="border-b border-slate-300 hover:bg-slate-200 cursor-pointer">
-            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                {file.name}
+        <tr className="border-b border-slate-300 hover:bg-slate-200 ">
+            <th scope="row" className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap">
+                <Link to={`/file/${file.id}`} key={file.id} className='cursor-pointer hover:text-blue-700'>
+                    {file.name}
+                </Link>
             </th>
             <td className="px-6 py-4">
                 {file.uploader.id === user_id ? 'Owned by me' : file.uploader.first_name + ' ' + file.uploader.last_name}
@@ -19,6 +22,7 @@ function File({ file, user_id }) {
                 {new Date(file.expiration_date).toDateString()}
             </td>
         </tr>
+
     )
 }
 

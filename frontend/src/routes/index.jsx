@@ -7,6 +7,7 @@ import MainLayout from "~/layouts";
 import { useEffect } from 'react'
 import { loginSuccess } from '~/store/auth'
 import { setTokenToAxios } from '~/utils/axios'
+import FileDetail from '~/pages/fileDetail'
 
 
 function AppRoutes() {
@@ -28,6 +29,7 @@ function AppRoutes() {
                 <MainLayout>
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/file/:fileId" element={<FileDetail />} />
                         <Route path='/*' element={<Navigate to="/" />} />
                     </Routes>
                 </MainLayout>
