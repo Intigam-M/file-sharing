@@ -3,13 +3,14 @@ import { useParams } from 'react-router-dom';
 import WebSocketInstance from '~/utils/webSocketConfig';
 import { useSelector } from 'react-redux';
 import iaxios from '~/utils/axios'
+import Comment from '~/components/comment';
 
 const FileDetail = () => {
     const { fileId } = useParams();
     const [comments, setComments] = useState({});
     const [newComment, setNewComment] = useState('');
     const [fileDetail, setFileDetail] = useState({});
-    const userId = useSelector(state => state.auth.user.id);
+    const authUser = useSelector(state => state.auth.user);
 
 
     useEffect(() => {
@@ -22,12 +23,12 @@ const FileDetail = () => {
 
     useEffect(() => {
         const handleIncomingMessage = (event) => {
-            const eventObj = JSON.parse(event.data);
-            const newComment = eventObj.data.message;
-            setComments((prevComments) => [newComment, ...prevComments])
+            const message = JSON.parse(event.data);
+            console.log(message);
+            setComments((prevComments) => [message, ...prevComments])
         }
 
-        WebSocketInstance.connect(`ws://localhost:8000/ws/file/${fileId}/comments/`);
+        WebSocketInstance.connect(`ws://localhost:8000/ws/file/${fileId}/comments/?user_id=${authUser.id}`);
         WebSocketInstance.handleIncomingMessage(handleIncomingMessage);
 
         return () => {
@@ -39,18 +40,18 @@ const FileDetail = () => {
     const sendComment = (e) => {
         e.preventDefault();
         if (newComment.trim() === '') return;
-        WebSocketInstance.sendMessage(JSON.stringify({ type: 'comment_message', data: { message: newComment, user_id: userId } }));
+        WebSocketInstance.sendMessage(JSON.stringify({ type: 'comment_message', message: newComment }));
         setNewComment('');
     };
 
     return (
         <div className="container mx-auto">
             <h2 className="text-2xl font-bold mb-4">File Detail</h2>
-            <div className="border p-4 rounded-md shadow-md">
+            <div className="border border-slate-400 p-4 rounded-md shadow-md">
                 <h3 className="text-xl font-bold mb-2">{fileDetail.name}</h3>
                 <p className="text-sm mb-4">{fileDetail?.description}</p>
                 <p className="text-sm mb-2">
-                <strong>Uploader: </strong>
+                    <strong>Uploader: </strong>
                     {fileDetail.uploader?.first_name} {fileDetail.uploader?.last_name}</p>
                 <p className="text-sm mb-2"><strong>Upload Date:</strong> {new Date(fileDetail.upload_date).toDateString()}</p>
                 <p className="text-sm mb-4"><strong>Expiration Date:</strong> {new Date(fileDetail.expiration_date).toDateString()}</p>
@@ -63,13 +64,7 @@ const FileDetail = () => {
                     </div>
                 </form>
                 {Object.keys(comments).map((comment, index) => (
-                    <div key={index} className="border p-3 mb-4 rounded-md shadow-md flex justify-between">
-                        <p>{comments[comment].content}</p>
-                        <div>
-                            <p>{comments[comment].author.first_name} {comments[comment].author.last_name}</p>
-                            <p className='text-xs'>{new Date(comments[comment].timestamp).toDateString()}</p>
-                        </div>
-                    </div>
+                    <Comment key={index} comment={comment} comments={comments} authUser={authUser} uploader={fileDetail.uploader}/>
                 ))}
             </div>
         </div>
