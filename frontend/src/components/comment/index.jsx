@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import Swal from 'sweetalert2'
 import toast from "react-hot-toast";
 import iaxios from '~/utils/axios';
+import { setModal } from '~/store/modal/actions';
 
 function Comment({ comments, comment, authUser, uploader, setComments }) {
 
@@ -38,7 +39,9 @@ function Comment({ comments, comment, authUser, uploader, setComments }) {
                 <p className='font-medium'>{comments[comment].content}</p>
             </div>
             <div className='flex gap-3'>
-                {authUser.id === comments[comment].author.id && <button className='border rounded px-4 bg-blue-600 text-white'>Edit</button>}
+                {authUser.id === comments[comment].author.id
+                    && <button className='border rounded px-4 bg-blue-600 text-white'
+                        onClick={() => setModal('UpdateComment', {comment_id:comments[comment].id, comment:comments[comment].content, setComments:setComments })}>Edit</button>}
                 {
                     (authUser.id === comments[comment].author.id || authUser.id === uploader.id)
                     && <button className='border rounded px-4 bg-red-600 text-white' onClick={deleteComment}>Delete</button>

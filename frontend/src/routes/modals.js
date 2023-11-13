@@ -1,9 +1,9 @@
-import DeleteCommentModal from "~/modals/deleteComment";
+import UpdateCommentModal from "~/modals/updateComment";
 
 const modals = [
 	{
-		name: 'deleteComment',
-		element: DeleteCommentModal
+		name: 'UpdateComment',
+		element: UpdateCommentModal
 	}
 ]
 
