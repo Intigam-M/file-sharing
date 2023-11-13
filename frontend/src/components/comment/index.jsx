@@ -41,7 +41,7 @@ function Comment({ comments, comment, authUser, uploader, setComments }) {
             <div className='flex gap-3'>
                 {authUser.id === comments[comment].author.id
                     && <button className='border rounded px-4 bg-blue-600 text-white'
-                        onClick={() => setModal('UpdateComment', {comment_id:comments[comment].id, comment:comments[comment].content, setComments:setComments })}>Edit</button>}
+                        onClick={() => setModal('UpdateComment', {comment_id:comments[comment].id, comment:comments[comment].content, setComments:setComments, modalTitle: 'Update comment' })}>Edit</button>}
                 {
                     (authUser.id === comments[comment].author.id || authUser.id === uploader.id)
                     && <button className='border rounded px-4 bg-red-600 text-white' onClick={deleteComment}>Delete</button>

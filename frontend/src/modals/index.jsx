@@ -21,7 +21,7 @@ export default function Modal() {
         <div className="border-b">
           <div className="flex justify-between items-center px-4 py-2">
             <h2 className="text-xl font-bold text-slate-600">
-              Update comment
+              {currentModal && modal.data.modalTitle}
             </h2>
             <button onClick={closeModal}>
               <AiOutlineClose className="text-xl" />
