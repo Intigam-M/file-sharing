@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import iaxios from '~/utils/axios'
 import Comment from '~/components/comment';
 
+
 const FileDetail = () => {
     const { fileId } = useParams();
     const [comments, setComments] = useState({});
@@ -64,7 +65,7 @@ const FileDetail = () => {
                     </div>
                 </form>
                 {Object.keys(comments).map((comment, index) => (
-                    <Comment key={index} comment={comment} comments={comments} authUser={authUser} uploader={fileDetail.uploader}/>
+                    <Comment key={index} comment={comment} comments={comments} authUser={authUser} uploader={fileDetail.uploader} setComments={setComments}/>
                 ))}
             </div>
         </div>
