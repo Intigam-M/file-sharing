@@ -61,6 +61,10 @@ class ShareFileView(generics.CreateAPIView):
             raise PermissionDenied('User with this email does not exist.')
         file_id = self.kwargs.get('file_id')
         file_instance = File.objects.get(pk=file_id)
+        check_share = Share.objects.filter(file=file_instance, shared_with=user).first()
+        if check_share:
+            raise PermissionDenied('File is already shared with this user.')
+
         serializer.save(file=file_instance, shared_with=user)
 
 
@@ -133,3 +137,42 @@ class DeleteCommentView(generics.DestroyAPIView):
         else:
             return Response({'detail': 'You are not allowed to delete this comment.'}, status=status.HTTP_403_FORBIDDEN)
 
+class SharedFileListView(generics.ListAPIView):
+    serializer_class = ShareSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        my_files = File.objects.filter(uploader=self.request.user)
+        share_list = Share.objects.filter(file__in=my_files)
+        return share_list
+      
+class UpdateSharedDataView(generics.UpdateAPIView):
+    queryset = Share.objects.all()
+    serializer_class = ShareSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.user == instance.file.uploader:
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response({'detail': 'You do not have permission to edit this information.'}, status=status.HTTP_403_FORBIDDEN)
+        
+class StopSharingView(generics.DestroyAPIView):
+    queryset = Share.objects.all()
+    serializer_class = ShareSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            share_instance = self.get_object()
+            if share_instance.file.uploader == request.user:
+                share_instance.delete()
+                return Response({"detail": "File sharing stopped successfully."}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response({"detail": "You don't have permission to stop sharing this file."}, status=status.HTTP_403_FORBIDDEN)
+        except Share.DoesNotExist:
+            return Response({"detail": "File not found."}, status=status.HTTP_404_NOT_FOUND)

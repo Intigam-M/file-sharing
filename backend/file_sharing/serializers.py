@@ -12,9 +12,10 @@ class FileSerializer(serializers.ModelSerializer):
 
 class ShareSerializer(serializers.ModelSerializer):
     shared_with = UserInfoSerializer(read_only=True)
+    file = FileSerializer(read_only=True)
     class Meta:
         model = Share
-        fields = ['shared_with', 'can_view', 'can_comment']
+        fields = ['id', 'shared_with', 'can_view', 'can_comment', 'file']
 
 
 class CommentSerializer(serializers.ModelSerializer):
