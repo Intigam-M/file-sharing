@@ -1,5 +1,6 @@
 import UpdateCommentModal from "~/modals/updateComment";
 import AddFileModal from "~/modals/addFile";
+import SahreFileModal from "~/modals/shareFile";
 
 const modals = [
 	{
@@ -9,7 +10,11 @@ const modals = [
     {
         name: 'addFile',
         element: AddFileModal
-    }
+    },
+    {
+        name: 'shareFile',
+        element: SahreFileModal
+    },
 ]
 
 export default modals

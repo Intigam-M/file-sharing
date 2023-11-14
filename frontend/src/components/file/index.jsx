@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import iaxios from '~/utils/axios';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { setModal } from '~/store/modal/actions';
 
 function File({ file, user_id, setFiles }) {
 
@@ -18,7 +19,7 @@ function File({ file, user_id, setFiles }) {
         }).then((result) => {
             if (result.isConfirmed) {
                 iaxios.delete(`file/delete/${file.id}/`).then(() => {
-                    
+
                     toast.success('File deleted')
 
                     iaxios.get('file/list/').then(res => {
@@ -53,7 +54,11 @@ function File({ file, user_id, setFiles }) {
             </td>
             <td className="px-6 py-4">
                 <div className='flex gap-2 justify-center'>
-                    <button className='border rounded px-4 bg-blue-500 text-white py-1'>Share</button>
+                    <button
+                        className='border rounded px-4 bg-blue-500 text-white py-1'
+                        onClick={()=>setModal('shareFile',{ modalTitle: 'Share file', fileId:file.id})}>
+                        Share
+                    </button>
                     <button
                         className='border rounded px-4 bg-red-500 text-white py-1'
                         onClick={deleteFile} >
@@ -67,22 +72,9 @@ function File({ file, user_id, setFiles }) {
 }
 
 File.propTypes = {
-    file: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        description: PropTypes.string,
-        upload_date: PropTypes.string.isRequired,
-        expiration_date: PropTypes.string.isRequired,
-        uploader: PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            first_name: PropTypes.string.isRequired,
-            last_name: PropTypes.string.isRequired,
-        }).isRequired,
-    }).isRequired,
-
+    file: PropTypes.object.isRequired,
     user_id: PropTypes.number.isRequired,
+    setFiles: PropTypes.func.isRequired,
 }
-
-
 
 export default File

@@ -11,8 +11,8 @@ function Header() {
                 <p className="text-lg text-white">{authUser.first_name} {authUser.last_name}</p>
                 <div className="flex gap-3 text-white text-lg font-">
                     <NavLink to="/">Home</NavLink>
+                    <NavLink to="/shared-files">Shared files</NavLink>
                     <NavLink to="/" onClick={() => dispatch(logoutSuccess())}>Logout</NavLink>
-
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import { loginSuccess } from '~/store/auth'
 import { setTokenToAxios } from '~/utils/axios'
 import FileDetail from '~/pages/fileDetail'
-
+import SharedFile from '~/pages/shared'
 
 function AppRoutes() {
 
@@ -29,6 +29,7 @@ function AppRoutes() {
                 <MainLayout>
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/shared-files" element={<SharedFile />} />
                         <Route path="/file/:fileId" element={<FileDetail />} />
                         <Route path='/*' element={<Navigate to="/" />} />
                     </Routes>
