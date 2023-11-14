@@ -34,7 +34,7 @@ function File({ file, user_id, setFiles }) {
 
 
     return (
-        <tr className="border-b border-slate-300 hover:bg-slate-200 ">
+        <tr className="border-b border-slate-300 hover:bg-slate-200">
             <th scope="row" className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap">
                 <Link to={`/file/${file.id}`} key={file.id} className='cursor-pointer hover:text-blue-700'>
                     {file.name}
