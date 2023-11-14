@@ -10,9 +10,9 @@ websocket_urlpatterns = [
 ]
 
 
-application = ProtocolTypeRouter({
-    "websocket": AuthMiddlewareStack(
-        URLRouter(websocket_urlpatterns)
-    ),
-    # Add other protocols if needed
-})
+# application = ProtocolTypeRouter({
+#     "websocket": AuthMiddlewareStack(
+#         URLRouter(websocket_urlpatterns)
+#     ),
+#     # Add other protocols if needed
+# })

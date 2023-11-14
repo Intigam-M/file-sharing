@@ -7,7 +7,8 @@ from .models import File, Share, Comment
 from .serializers import FileSerializer, ShareSerializer, CommentSerializer
 from django.http import HttpResponse
 from .tasks import delete_files_older_than_7_days
-
+import os
+from django.contrib.auth.models import User
 
 class FileListView(generics.ListAPIView):
     serializer_class = FileSerializer
@@ -35,13 +36,18 @@ class DeleteFileView(generics.DestroyAPIView):
         try:
             file_instance = self.get_object()
             if file_instance.uploader == request.user:
-                file_instance.delete()
-                return Response({"detail": "File deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+                file_path = file_instance.file_data.path
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                    file_instance.delete()
+                    return Response({"detail": "File deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+                else:
+                    return Response({"detail": "File not found on the server."}, status=status.HTTP_404_NOT_FOUND)
             else:
                 return Response({"detail": "You don't have permission to delete this file."}, status=status.HTTP_403_FORBIDDEN)
         except File.DoesNotExist:
             return Response({"detail": "File not found."}, status=status.HTTP_404_NOT_FOUND)
-        
+
 
 class ShareFileView(generics.CreateAPIView):
     queryset = Share.objects.all()
@@ -49,9 +55,13 @@ class ShareFileView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer):
+        email = self.request.query_params.get('email')
+        user = User.objects.filter(email=email).first()
+        if not user:
+            raise PermissionDenied('User with this email does not exist.')
         file_id = self.kwargs.get('file_id')
         file_instance = File.objects.get(pk=file_id)
-        serializer.save(file=file_instance)
+        serializer.save(file=file_instance, shared_with=user)
 
 
 class FileDetailView(generics.RetrieveAPIView):
@@ -122,4 +132,4 @@ class DeleteCommentView(generics.DestroyAPIView):
             return Response({'detail': 'Comment deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'detail': 'You are not allowed to delete this comment.'}, status=status.HTTP_403_FORBIDDEN)
-        
+
