@@ -36,11 +36,12 @@ function Home() {
                                     <th scope="col" className="px-6 py-3">Description</th>
                                     <th scope="col" className="px-6 py-3">Upload Date</th>
                                     <th scope="col" className="px-6 py-3">Expiration Date</th>
+                                    <th scope="col" className="px-6 py-3 flex justify-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {files.map((file) => (
-                                    <File key={file.id} file={file} user_id={user.id} />
+                                    <File key={file.id} file={file} user_id={user.id} setFiles={setFiles}/>
                                 ))}
                             </tbody>
                         </table>
@@ -49,8 +50,8 @@ function Home() {
                 <div >
                     <button
                         className='border rounded px-6 py-2 bg-green-500 text-white'
-                        onClick={() => setModal('addFile', { modalTitle: 'Add file', setFiles: setFiles })}>
-                        Add file
+                        onClick={() => setModal('addFile', { modalTitle: 'Upload file', setFiles: setFiles })}>
+                        Upload file
                     </button>
                 </div>
             )

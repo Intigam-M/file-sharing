@@ -48,7 +48,7 @@ function AddFileModal({ closeModal }) {
                 <button
                     className='bg-blue-500 px-3 py-2 rounded text-white'
                     onClick={handleFileUpload} >
-                    Add
+                    Upload
                 </button>
             </form>
         </div>
