@@ -6,7 +6,7 @@ import { setModal } from '~/store/modal/actions'
 
 function Home() {
     const [files, setFiles] = useState([])
-    const user = useSelector(state => state.auth.user);
+    const authUser = useSelector(state => state.auth.user);
 
     useEffect(() => {
         iaxios.get('file/list/').then(res => {
@@ -41,7 +41,7 @@ function Home() {
                             </thead>
                             <tbody>
                                 {files.map((file) => (
-                                    <File key={file.id} file={file} user_id={user.id} setFiles={setFiles}/>
+                                    <File key={file.id} file={file} authUser={authUser} setFiles={setFiles} />
                                 ))}
                             </tbody>
                         </table>
@@ -54,8 +54,7 @@ function Home() {
                         Upload file
                     </button>
                 </div>
-            )
-            }
+            )}
         </div>
     )
 }

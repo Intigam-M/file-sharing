@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { setModal } from '~/store/modal/actions';
 
-function File({ file, user_id, setFiles }) {
+function File({ file, authUser, setFiles }) {
 
     const deleteFile = () => {
         Swal.fire({
@@ -41,7 +41,7 @@ function File({ file, user_id, setFiles }) {
                 </Link>
             </th>
             <td className="px-6 py-4">
-                {file.uploader.id === user_id ? 'Owned by me' : file.uploader.first_name + ' ' + file.uploader.last_name}
+                {file.uploader.id === authUser.id ? 'Owned by me' : file.uploader.first_name + ' ' + file.uploader.last_name}
             </td>
             <td className="px-6 py-4">
                 {file.description}
@@ -52,28 +52,32 @@ function File({ file, user_id, setFiles }) {
             <td className="px-6 py-4">
                 {new Date(file.expiration_date).toDateString()}
             </td>
-            <td className="px-6 py-4">
-                <div className='flex gap-2 justify-center'>
-                    <button
-                        className='border rounded px-4 bg-blue-500 text-white py-1'
-                        onClick={()=>setModal('shareFile',{ modalTitle: 'Share file', fileId:file.id})}>
-                        Share
-                    </button>
-                    <button
-                        className='border rounded px-4 bg-red-500 text-white py-1'
-                        onClick={deleteFile} >
-                        Delete
-                    </button>
-                </div>
-            </td>
+            {file.uploader.id === authUser.id
+                ?
+                <td className="px-6 py-4">
+                    <div className='flex gap-2 justify-center'>
+                        <button
+                            className='border rounded px-4 bg-blue-500 text-white py-1'
+                            onClick={() => setModal('shareFile', { modalTitle: 'Share file', fileId: file.id })}>
+                            Share
+                        </button>
+                        <button
+                            className='border rounded px-4 bg-red-500 text-white py-1'
+                            onClick={deleteFile} >
+                            Delete
+                        </button>
+                    </div>
+                </td>
+                :
+                <td></td>
+            }
         </tr>
-
     )
 }
 
 File.propTypes = {
     file: PropTypes.object.isRequired,
-    user_id: PropTypes.number.isRequired,
+    authUser: PropTypes.object.isRequired,
     setFiles: PropTypes.func.isRequired,
 }
 

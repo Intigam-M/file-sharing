@@ -13,7 +13,6 @@ const FileDetail = () => {
     const [fileDetail, setFileDetail] = useState({});
     const authUser = useSelector(state => state.auth.user);
 
-
     useEffect(() => {
         iaxios.get(`file/${fileId}/detail/`).then(res => {
             setFileDetail(res.data);
@@ -25,7 +24,6 @@ const FileDetail = () => {
     useEffect(() => {
         const handleIncomingMessage = (event) => {
             const message = JSON.parse(event.data);
-            console.log(message);
             setComments((prevComments) => [message, ...prevComments])
         }
 
@@ -58,14 +56,16 @@ const FileDetail = () => {
                 <p className="text-sm mb-4"><strong>Expiration Date:</strong> {new Date(fileDetail.expiration_date).toDateString()}</p>
                 <a href={fileDetail.file_data} className="text-blue-500 hover:underline block mb-4">View File</a>
                 <h3 className="text-xl font-bold mb-2">Comments</h3>
-                <form className='flex gap-3'>
-                    <input type="text" value={newComment} onChange={(e) => setNewComment(e.target.value)} className='border flex-1 rounded p-3 mb-4' placeholder='Add comment' />
-                    <div>
-                        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-3 rounded' onClick={sendComment}>Add Comment</button>
-                    </div>
-                </form>
+                {fileDetail?.share_data?.can_comment &&
+                    <form className='flex gap-3'>
+                        <input type="text" value={newComment} onChange={(e) => setNewComment(e.target.value)} className='border flex-1 rounded p-3 mb-4' placeholder='Add comment' />
+                        <div>
+                            <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-3 rounded' onClick={sendComment}>Add Comment</button>
+                        </div>
+                    </form>
+                }
                 {Object.keys(comments).map((comment, index) => (
-                    <Comment key={index} comment={comment} comments={comments} authUser={authUser} uploader={fileDetail.uploader} setComments={setComments}/>
+                    <Comment key={index} comment={comment} comments={comments} authUser={authUser} fileDetail={fileDetail} setComments={setComments} />
                 ))}
             </div>
         </div>

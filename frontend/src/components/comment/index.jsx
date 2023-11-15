@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import iaxios from '~/utils/axios';
 import { setModal } from '~/store/modal/actions';
 
-function Comment({ comments, comment, authUser, uploader, setComments }) {
+function Comment({ comments, comment, authUser, fileDetail, setComments }) {
 
 
     const deleteComment = () => {
@@ -39,11 +39,11 @@ function Comment({ comments, comment, authUser, uploader, setComments }) {
                 <p className='font-medium'>{comments[comment].content}</p>
             </div>
             <div className='flex gap-3'>
-                {authUser.id === comments[comment].author.id
+                {authUser.id === comments[comment].author.id && fileDetail?.share_data?.can_comment
                     && <button className='border rounded px-4 bg-blue-600 text-white'
                         onClick={() => setModal('UpdateComment', {comment_id:comments[comment].id, comment:comments[comment].content, setComments:setComments, modalTitle: 'Update comment' })}>Edit</button>}
                 {
-                    (authUser.id === comments[comment].author.id || authUser.id === uploader.id)
+                    (authUser.id === comments[comment].author.id && fileDetail?.share_data?.can_comment || authUser.id === fileDetail.uploader.id)
                     && <button className='border rounded px-4 bg-red-600 text-white' onClick={deleteComment}>Delete</button>
                 }
             </div>
@@ -55,7 +55,7 @@ Comment.propTypes = {
     comment: PropTypes.string.isRequired,
     comments: PropTypes.array.isRequired,
     authUser: PropTypes.object.isRequired,
-    uploader: PropTypes.object.isRequired,
+    fileDetail: PropTypes.object.isRequired,
     setComments: PropTypes.func.isRequired,
 }
 
