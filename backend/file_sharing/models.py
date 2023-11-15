@@ -10,6 +10,8 @@ class File(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)
     expiration_date = models.DateTimeField(default=timezone.now() + timedelta(weeks=1))
     file_data = models.FileField(upload_to='')
+    class Meta:
+        ordering = ['-upload_date']
 
 class Share(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)

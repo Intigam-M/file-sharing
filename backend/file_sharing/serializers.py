@@ -3,6 +3,13 @@ from rest_framework import serializers
 from .models import File, Share, Comment
 from user.serializers import UserInfoSerializer
 
+
+class ShareSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Share
+        fields =  ['can_view', 'can_comment']
+
+
 class FileSerializer(serializers.ModelSerializer):
     uploader = UserInfoSerializer(read_only=True)
     class Meta:

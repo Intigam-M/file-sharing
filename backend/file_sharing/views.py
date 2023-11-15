@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from .models import File, Share, Comment
-from .serializers import FileSerializer, ShareSerializer, CommentSerializer
+from .serializers import FileSerializer, ShareSerializer, CommentSerializer, ShareSimpleSerializer
 from django.http import HttpResponse
 from .tasks import delete_files_older_than_7_days
 import os
@@ -81,6 +81,15 @@ class FileDetailView(generics.RetrieveAPIView):
             serializer = self.get_serializer(instance)
             data = serializer.data
             data['comments'] = comment_serializer.data
+            if instance.uploader == request.user:
+                data['share_data'] = {
+                    "can_view": True,
+                    "can_comment": True
+                }
+            else:
+                share_data = Share.objects.filter(file=instance, shared_with=request.user).first()
+                share_data_serializer = ShareSimpleSerializer(share_data)
+                data['share_data'] = share_data_serializer.data
             return Response(data)
         else:
             return Response({'detail': 'You are not allowed to view this file.'}, status=status.HTTP_403_FORBIDDEN)
