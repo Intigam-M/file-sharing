@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from .models import LoginInfo
+
 
 @api_view(['POST'])
 def user_register(request):
@@ -23,6 +25,16 @@ def user_login(request):
         user = User.objects.filter(username=user_info).first()
     if user and user.check_password(password):
         serializer = UserInfoSerializer(instance=user)
+
+        # Save login info
+        LoginInfo.objects.create(
+            user= user.first_name + ' ' + user.last_name,   
+            browser='user_browser',  # Get user's browser information
+            operating_system='user_os',  # Get user's operating system information
+            ip_address='user_ip',  # Get user's IP address
+            # Add other relevant login information
+        )
+
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(data={'message': 'User info or password is incorrect!'}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -93,8 +93,23 @@ DATABASES = {
         "PASSWORD": getenv('DB_PASSWORD'),
         "HOST": getenv('DB_HOST'),
         "PORT": getenv('DB_PORT'),
-    }
+    },
+     'login_info': {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "file_sharing_log",
+        "USER": getenv('DB_USER'),
+        "PASSWORD": getenv('DB_PASSWORD'),
+        "HOST": getenv('DB_HOST'),
+        "PORT": getenv('DB_PORT'),
+     }
 }
+
+DATABASE_ROUTERS = [
+    'user.routers.LoginInfoRouter',
+]
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
