@@ -9,6 +9,7 @@ import { loginSuccess } from '~/store/auth'
 import { setTokenToAxios } from '~/utils/axios'
 import FileDetail from '~/pages/fileDetail'
 import SharedFile from '~/pages/shared'
+import Register from '~/pages/register'
 
 function AppRoutes() {
 
@@ -39,6 +40,7 @@ function AppRoutes() {
             return (
                 <Routes>
                     <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                     <Route path='/*' element={<Navigate to="/login" />} />
                 </Routes>
             )

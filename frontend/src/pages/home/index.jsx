@@ -23,8 +23,8 @@ function Home() {
                         <h1 className="text-2xl font-bold mb-4 text-slate-500">File List</h1>
                         <button
                             className='border rounded px-6 py-2 bg-green-500 text-white'
-                            onClick={() => setModal('addFile', { modalTitle: 'Add file', setFiles: setFiles })}>
-                            Add file
+                            onClick={() => setModal('addFile', { modalTitle: 'Upload file', setFiles: setFiles })}>
+                            Upload file
                         </button>
                     </div>
                     <div className="relative overflow-x-auto">

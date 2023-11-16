@@ -4,6 +4,7 @@ import { loginSuccess } from '~/store/auth'
 import iaxios from '~/utils/axios';
 import toast from "react-hot-toast"; 
 import{setTokenToAxios} from '~/utils/axios'
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -24,8 +25,9 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <form onSubmit={handleLogin} className="bg-white p-10 rounded shadow-md w-80">
+        <div className="min-h-screen flex items-center justify-center bg-indigo-200">
+            <div className="bg-white p-10 rounded shadow-md w-4/12 flex flex-col gap-2">
+            <form onSubmit={handleLogin} >
                 <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
                 <div className="mb-4">
                     <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">Username</label>
@@ -53,6 +55,12 @@ const Login = () => {
                     Login
                 </button>
             </form>
+            <div className='flex gap-2'>
+                <p className='text-slate-400'>Don't have an account yet? </p>
+                <Link to="/register" className='text-blue-500 font-medium'>Sign up</Link>
+            </div>
+            </div>
+
         </div>
     );
 };
