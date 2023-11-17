@@ -88,20 +88,20 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": getenv('DB_NAME'),
-        "USER": getenv('DB_USER'),
-        "PASSWORD": getenv('DB_PASSWORD'),
-        "HOST": getenv('DB_HOST'),
-        "PORT": getenv('DB_PORT'),
+        "NAME": getenv('POSTGRES_DB'),
+        "USER": getenv('POSTGRES_USER'),
+        "PASSWORD": getenv('POSTGRES_PASSWORD'),
+        "HOST": getenv('POSTGRES_HOST'),
+        "PORT": getenv('POSTGRES_PORT'),
     },
-     'login_info': {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "file_sharing_log",
-        "USER": getenv('DB_USER'),
-        "PASSWORD": getenv('DB_PASSWORD'),
-        "HOST": getenv('DB_HOST'),
-        "PORT": getenv('DB_PORT'),
-     }
+    #  'login_info': {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": "file_sharing_log",
+    #     "USER": getenv('POSTGRES_USER'),
+    #     "PASSWORD": getenv('POSTGRES_PASSWORD'),
+    #     "HOST": getenv('POSTGRES_HOST'),
+    #     "PORT": getenv('POSTGRES_PORT'),
+    #  }
 }
 
 DATABASE_ROUTERS = [
