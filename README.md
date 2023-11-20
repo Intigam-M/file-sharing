@@ -1,5 +1,5 @@
 # File Sharing App
-![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/home-page.PNG)
+![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/screenshots/home-page.PNG)
 
 A Django and React-based file sharing application that enables registered users to upload, share, and comment on files securely.
 
@@ -40,11 +40,11 @@ docker-compose up
 
 ## Screenshots
 
-![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/file-detail.PNG)
+![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/screenshots/file-detail.PNG)
 
-![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/share-file.PNG)
+![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/screenshots/share-file.PNG)
 
-![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/shared-files.PNG)
+![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/screenshots/shared-files.PNG)
 
 
 
