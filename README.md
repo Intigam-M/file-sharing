@@ -46,6 +46,10 @@ docker-compose up
 
 ![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/screenshots/shared-files.PNG)
 
+![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/screenshots/register.PNG)
+
+![File Sharing](https://github.com/Intigam-M/file-sharing/blob/main/screenshots/login.PNG)
+
 
 
 
